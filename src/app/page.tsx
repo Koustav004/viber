@@ -1,13 +1,13 @@
-import prisma from "@/lib/db";
+// import prisma from "@/lib/db";
 
-const Page = async () => {
+// const Page = async () => {
 
-  const users = await prisma.post.findMany();
+//   const users = await prisma.post.findMany();
 
-  return (
-    <div>
-      {JSON.stringify(users, null, 2)} 
-    </div>
-  );
-}
- export default Page; 
+//   return (
+//     <div>
+//       {JSON.stringify(users, null, 2)} 
+//     </div>
+//   );
+// }
+//  export default Page; 
