@@ -7,5 +7,5 @@ const handler = (req: Request) =>
     req,
     router: appRouter,
     createContext: createTRPCContext,
-  });
+  });// Export GET and POST handlers
 export { handler as GET, handler as POST };
