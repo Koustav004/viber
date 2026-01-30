@@ -1,19 +1,26 @@
-import { gemini, createAgent, createTool, createNetwork } from "@inngest/agent-kit";
+import { gemini, createAgent, createTool, createNetwork, type Tool } from "@inngest/agent-kit";
 import { Sandbox } from "@e2b/code-interpreter";
 import { PROMPT } from "@/prompt";
 import { inngest } from "./client";
 import { z } from "zod";
+import  prisma  from "@/lib/db";
 import { getSandbox, lastAssistantTextMessage } from "./utils";
+import path from "path";
 
-export const helloWorld = inngest.createFunction(
-  { id: "hello-world" },
-  { event: "test/hello.world" },
+interface AgentState {
+  summary?: string;
+  files: {[path: string]: string};
+}
+
+export const codeAgentFunction = inngest.createFunction(
+  { id: "code-agent" },
+  { event: "code-agent/run" },
   async ({ event, step }) => {
     const sandboxId = await step.run("get-sandbox-id", async () => {
       const sandbox = await Sandbox.create("viberv0-dev");
       return sandbox.sandboxId;
     });
-    const codeAgent = createAgent({
+    const codeAgent = createAgent<AgentState>({
       name: "code-agent",
       description:"An expert coding agent",
       system: PROMPT,
@@ -64,7 +71,7 @@ export const helloWorld = inngest.createFunction(
               }),
             ),
           }),
-          handler: async ({ files }, { step, network }) => {
+          handler: async ({ files }, { step, network }: Tool.Options<AgentState>) => {
             const newfiles = await step?.run(
               "create-or-update-file",
               async () => {
@@ -114,20 +121,20 @@ export const helloWorld = inngest.createFunction(
           const lastAssistantMessageText = lastAssistantTextMessage(result);
           if (lastAssistantMessageText && network) {
             if (lastAssistantMessageText.includes("<task_summary>")) {
-              network.state.data.task_summary = lastAssistantMessageText;
+              network.state.data.summary = lastAssistantMessageText;
             }
           }
           return result;
         }
       }
     });
-    const network = createNetwork({
+    const network = createNetwork<AgentState>({
       name: "code-agent-network",
       agents: [codeAgent],
       maxIter: 10,
       router: async ({ network }) => {
-        const taskSummary = network.state.data.task_summary;
-        if (taskSummary) {
+        const summary = network.state.data.summary;
+        if (summary) {
           return;
         }
         return codeAgent;
@@ -136,17 +143,51 @@ export const helloWorld = inngest.createFunction(
     // const { output } = await codeAgent.run(`code: ${event.data.value}`);
     const result = await network.run(event.data.value);
 
+    const summary = result.state.data.summary;
+    const files = result.state.data.files || {};
+    const errorMessage = "Something went wrong. Please try again later.";
+    const isError = !summary || Object.keys(files).length === 0;
+
     const sandboxUrl = await step.run("get-sandbox-url", async () => {
       const sandbox = await getSandbox(sandboxId);
       const host = sandbox.getHost(3000);
       return `http://${host}`;
     });
+    
+    await step.run("save-result", async() => {
+      if(isError){
+        return await prisma.message.create({
+          data: {
+            projectId: event.data.projectId,
+            content: errorMessage,
+            role: "ASSISTANT",
+            type: "ERROR",
+          },
+        });
+      }
+      return await prisma.message.create({
+        data: {
+          projectId: event.data.projectId,
+          content: summary,
+          role: "ASSISTANT",
+          type: "RESULT",
+          fragment: {
+            create: {
+            sandboxUrl: sandboxUrl,
+            title: "Fragment",
+            files: result.state.data.files
+            },
+          },
+        },
+      })
+    })
+
 
     return { 
         url : sandboxUrl,
-        title: "Project Sandbox",
+        title: "Fragment",
         files: result.state.data.files,
-        summary: result.state.data.task_summary,
+        summary: result.state.data.summary,
 
       };
   },
