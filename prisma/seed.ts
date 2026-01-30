@@ -1,6 +1,6 @@
-import { PrismaClient, Prisma } from "../src/generated/prisma/client";
-import { PrismaPg } from '@prisma/adapter-pg'
-import 'dotenv/config'
+import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import "dotenv/config";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
@@ -10,42 +10,29 @@ const prisma = new PrismaClient({
   adapter,
 });
 
-const userData: Prisma.UserCreateInput[] = [
+const messageData: Prisma.MessageCreateInput[] = [
   {
-    name: "Alice",
-    email: "alice@prisma.io",
-    posts: {
-      create: [
-        {
-          title: "Join the Prisma Discord",
-          content: "https://pris.ly/discord",
-          published: true,
-        },
-        {
-          title: "Prisma on YouTube",
-          content: "https://pris.ly/youtube",
-        },
-      ],
-    },
+    content: "Hello from seed",
+    role: "USER",
+    type: "RESULT",
   },
   {
-    name: "Bob",
-    email: "bob@prisma.io",
-    posts: {
-      create: [
-        {
-          title: "Follow Prisma on Twitter",
-          content: "https://www.twitter.com/prisma",
-          published: true,
-        },
-      ],
+    content: "Seeded assistant result with fragment",
+    role: "ASSISTANT",
+    type: "RESULT",
+    fragment: {
+      create: {
+        sandboxUrl: "http://localhost:3000",
+        title: "Seed Fragment",
+        files: {},
+      },
     },
   },
 ];
 
 export async function main() {
-  for (const u of userData) {
-    await prisma.user.create({ data: u });
+  for (const message of messageData) {
+    await prisma.message.create({ data: message });
   }
 }
 
