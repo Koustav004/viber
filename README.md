@@ -36,6 +36,6 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 =======
-# viber
+# viberV0
 It is a vibe coding platform. The project is currently ongoing if anyone want to contribute contact me on koustavrudra06@gmail.com
 >>>>>>> 078d179 (Initial commit)
