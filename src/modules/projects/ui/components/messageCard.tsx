@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils"
 import { Card } from "@/components/ui/card"
 import { format } from "date-fns";
 import Image from "next/image";
-import { Code2Icon } from "lucide-react";
+import { ChevronRightIcon, Code2Icon } from "lucide-react";
 
 interface UserMessageProps {
     content: string;
@@ -13,7 +13,7 @@ const UseMessage = ({ content }: UserMessageProps) => {
     return (
         <div className="flex justify-end pb-4 pr-2 pl-10">
             <Card className="rounded-lg bg-muted p-3 shadow-none border-none max-w-[80%] wrap-break-words">
-                (content)
+                {content}
             </Card>
         </div>
     );
@@ -33,7 +33,8 @@ const FragmentCard = ({
     return(
         <button
         className={cn(
-            "flex item-start text-start gap-2 border rounded-lg bg-muted w-fil p-3 hover:bg-secondary transition-colors", isActiveFragment &&
+            "flex item-start text-start gap-2 border rounded-lg bg-muted w-fit p-3 hover:bg-secondary transition-colors", 
+            isActiveFragment &&
             "bg-primary text-primary-foreground broder-primary hover:bg-primary",
         )}
         onClick={() => onFragmentClick(fragment)}
@@ -44,6 +45,9 @@ const FragmentCard = ({
             {fragment.title}
         </span>
         <span className="text-sm">Preview</span>
+        </div>
+        <div className="flex items-center justify-center mt-0.5">
+            <ChevronRightIcon className="size-4" />
         </div>
         </button>
     )
