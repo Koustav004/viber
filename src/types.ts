@@ -1,2 +1,1 @@
-//6:35:57 
-//-3:58:09
+export type TreeItem = string | [string, ...TreeItem[]];

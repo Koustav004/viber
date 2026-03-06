@@ -16,6 +16,8 @@ import {
     BreadcrumbEllipsis,
     BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
+import { convertFilesToTreeItems } from "@/lib/utils";
+import { TreeView } from "./treeView";
 
 type FileCollection = { [path: string]: string};
 
@@ -35,13 +37,26 @@ export const FileExplorer = ({
         const fileKeys = Object.keys(files);
         return fileKeys.length > 0 ? fileKeys[0] : null;
     });
+
+    const treeData = useMemo(() => {
+        return convertFilesToTreeItems(files);
+    }, [files]);
+
+    const handleFileSelect = useCallback((
+        filePath: string
+    ) => {
+        if(files[filePath]){
+            setSelectedFile(filePath);
+        }
+    }, [files])
+
     return(
         <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={30} minSize={30} className="bg-sidebar">
+            <ResizablePanel defaultSize={15} minSize={10} className="bg-sidebar">
                 <TreeView
-                    data={[]}
+                    data={treeData}
                     value={selectedFile}
-                    onSelect={() => {}}
+                    onSelect={handleFileSelect}
 
                 />
             </ResizablePanel>
