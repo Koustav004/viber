@@ -7,7 +7,7 @@ import { useTRPC } from "@/trpc/client"
 import { useState } from "react";
 import { ProjectHeader } from "../components/projectHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
+import { CodeView } from "@/components/codeView"
 import {
     ResizableHandle,
     ResizablePanel,
@@ -18,6 +18,8 @@ import { FragmentWeb } from "../components/fragmentWeb";
 import { EyeIcon, CodeIcon, CrownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { FileExplorer } from "@/components/fileExplorer";
+
 
 interface Props{
     projectId: string;
@@ -78,8 +80,12 @@ export const ProjectView = ({projectId}: Props) => {
                             <TabsContent value="preview">
                                 {!!activeFragment && <FragmentWeb data = {activeFragment} />}
                             </TabsContent>
-                            <TabsContent value="code">
-                                <p>TODO:Code</p>
+                            <TabsContent value="code" className="min-h-0">
+                                {!!activeFragment?.files && (
+                                    <FileExplorer 
+                                        files={activeFragment.files as {[path:string]: string}}
+                                    />
+                                )}
                             </TabsContent>
                         </Tabs>
                     </ResizablePanel>
