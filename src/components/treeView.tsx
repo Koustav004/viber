@@ -64,7 +64,7 @@ interface TreeProps {
 
 const Tree = ({ item, selectedValue, onSelect, parentPath }: TreeProps) =>  {
     const [name, ...items] = Array.isArray(item)? item:[item];
-    const currentPath = parentPath?`${parentPath}/name`:name;
+    const currentPath = parentPath?`${parentPath}/${name}`: name;
 
     if(!items.length){
         const isSelected = selectedValue === currentPath; //file
@@ -84,6 +84,7 @@ const Tree = ({ item, selectedValue, onSelect, parentPath }: TreeProps) =>  {
     }
 
     // Folder
+    return (
     <SidebarMenuItem>
         <Collapsible
         className="group/collapsible [&[data-state=open]>buttom>svg:first-child]:rotate-90"
@@ -111,4 +112,5 @@ const Tree = ({ item, selectedValue, onSelect, parentPath }: TreeProps) =>  {
             </CollapsibleContent>
         </Collapsible>
     </SidebarMenuItem>
-}
+    );
+};

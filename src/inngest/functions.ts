@@ -5,7 +5,6 @@ import { inngest } from "./client";
 import { z } from "zod";
 import  prisma  from "@/lib/db";
 import { getSandbox, lastAssistantTextMessage } from "./utils";
-import path from "path";
 
 interface AgentState {
   summary?: string;

@@ -26,6 +26,7 @@ function getLanguageFromExtension(filename: string): string {
     return extension || "text";
 };
 
+
 interface FileExplorerProps {
     files: FileCollection
 };
@@ -52,7 +53,7 @@ export const FileExplorer = ({
 
     return(
         <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={15} minSize={10} className="bg-sidebar">
+            <ResizablePanel defaultSize={20} minSize={20} className="bg-sidebar">
                 <TreeView
                     data={treeData}
                     value={selectedFile}
@@ -86,7 +87,7 @@ export const FileExplorer = ({
                     </div>
                 ) : (
                     <div className="flex h-full items-center justify-center text-muted-foreground">
-                        Delect A File
+                        Select A File &apos;s content
                     </div>
                 )}
             </ResizablePanel>

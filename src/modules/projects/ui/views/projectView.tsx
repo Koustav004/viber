@@ -7,7 +7,6 @@ import { useTRPC } from "@/trpc/client"
 import { useState } from "react";
 import { ProjectHeader } from "../components/projectHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CodeView } from "@/components/codeView"
 import {
     ResizableHandle,
     ResizablePanel,
@@ -83,7 +82,7 @@ export const ProjectView = ({projectId}: Props) => {
                             <TabsContent value="code" className="min-h-0">
                                 {!!activeFragment?.files && (
                                     <FileExplorer 
-                                        files={activeFragment.files as {[path:string]: string}}
+                                        files={activeFragment.files as { [path:string]: string}}
                                     />
                                 )}
                             </TabsContent>
