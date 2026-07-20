@@ -1,0 +1,11 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+<<<<<<< HEAD
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "prisma.pinToPrisma6": true,
+  "postman.settings.dotenv-detection-notification-visibility": false
+}
+=======
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}
+>>>>>>> 7384eda (Final for production v.1.0.1)

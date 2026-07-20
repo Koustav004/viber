@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/app/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+<<<<<<< HEAD
+  "iconLibrary": "lucide",
+=======
+>>>>>>> 7384eda (Final for production v.1.0.1)
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+<<<<<<< HEAD
+  "registries": {}
+}
+=======
+  "iconLibrary": "lucide"
+}
+>>>>>>> 7384eda (Final for production v.1.0.1)
